@@ -1,9 +1,7 @@
-package org.ogabrielfelipe.model;
-
-import java.util.ArrayList;
+package org.managerTask.model;
 
 public class Task {
-    private String idTask;
+    private int idTask;
     private String subject;
     private String description;
     private Boolean status;
@@ -16,11 +14,11 @@ public class Task {
         this.status = status;
     }
 
-    public String getId() {
+    public int getId() {
         return idTask;
     }
 
-    public void setIdTask(String idTask) {
+    public void setIdTask(int idTask) {
         this.idTask = idTask;
     }
 
