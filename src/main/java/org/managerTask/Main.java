@@ -1,8 +1,5 @@
 package org.managerTask;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.managerTask.controller.TaskController;
 import org.managerTask.model.Task;
 
@@ -11,11 +8,10 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        TaskController taskController = new TaskController();
-        int optionSelected = 0;
+       int optionSelected = 0;
 
         Scanner sc = new Scanner(System.in);
-
+        TaskController taskController = new TaskController();
 
         while(optionSelected != 9){
             System.out.println("\n ________________________________________________________");
@@ -28,85 +24,118 @@ public class Main {
             System.out.println("[9] Sair.");
             System.out.println("________________________________________________________ \n");
 
-            System.out.println(">>");
+            System.out.print(">> ");
             optionSelected = sc.nextInt();
 
-            String subject = "";
-            String description = "";
-            String status = "";
+
 
             switch (optionSelected){
                 case 1:
-                    System.out.print("Assunto: \t");
-                    subject = sc.nextLine();
-                    sc.next();
-
-                    System.out.print("\nDescrição: \t");
-                    description = sc.nextLine();
-                    sc.next();
-
-                    System.out.print("\nAtivo (1 = Sim | 0 = Não): \t");
-                    status = sc.nextLine();
-                    sc.next();
-
-                    boolean statusAux = false;
-                    statusAux = status.equals("1");
-
-                    Task taskForCreate = new Task(subject, description, statusAux);
-                    taskController.createTask(taskForCreate);
-
-                    System.out.println("\n");
-                    taskController.listTasks();
+                    createTask(sc, taskController);
                     break;
                 case 2:
-                    int idTask = 4;
-                    Task taskForUpdate = new Task("Testando assundo 124", "Descrição do assunto 1145", false);
-                    taskForUpdate.setIdTask(idTask);
-                    taskController.updateTask(taskForUpdate);
-                    taskController.listTasks();
+                    updateTask(sc, taskController);
                     break;
                 case 3:
-                    int idTaskForDelete = 4;
-                    taskController.deleteTask(idTaskForDelete);
+                    deleteTask(sc, taskController);
                     break;
                 case 4:
-                    Task task = taskController.findTask(1);
+                    findTask(sc, taskController);
                     break;
                 case 5:
-                    taskController.listTasks();
+                    showTasks(taskController);
                     break;
                 default:
                     break;
 
             }
         }
-/*
 
-        // CRIAR UMA TASK
-        Task taskForCreate = new Task("Testando assundo 1", "Descrição do assunto 1", true);
-        taskController.createTask(taskForCreate);
-        taskController.listTasks();
-
-        //UPDATE TASK
-        int idTask = 4;
-        Task taskForUpdate = new Task("Testando assundo 124", "Descrição do assunto 1145", false);
-        taskForUpdate.setIdTask(idTask);
-        taskController.updateTask(taskForUpdate);
-        taskController.listTasks();
-
-        //BUSCAR UMA TASK
-        Task task = taskController.findTask(1);
-
-        //DELETE TASK
-        int idTaskForDelete = 4;
-        taskController.deleteTask(idTaskForDelete);
-
-
-        //LISTAR TODAS AS TASKS
-        taskController.listTasks();
-*/
     }
 
+    private static void createTask(Scanner sc, TaskController taskController){
+        System.out.println("\n ==== Cadastrando uma tarefa ====");
+        System.out.print("Assunto: \t");
+        String subject = sc.next();
+
+        System.out.print("Descrição: \t");
+        String description = sc.next();
+
+        System.out.print("Ativo (1 = Sim | 0 = Não): \t");
+        String statusInp = sc.next();
+
+        boolean status = false;
+        status = statusInp.equals("1");
+
+        Task taskForCreate = new Task(subject, description, status);
+        taskController.createTask(taskForCreate);
+
+        System.out.println("\n");
+        taskController.listTasks();
+    }
+
+    private static void updateTask(Scanner sc, TaskController taskController){
+        System.out.println("\n ==== Alterando uma tarefa ====");
+
+        System.out.println("Qual desses cadastros deseja alterar?");
+        taskController.listTasks();
+
+        System.out.print("Digite o Código de Identificação (idTask): ");
+        int idTask = Integer.parseInt(sc.next());
+
+        System.out.print("Assunto: ");
+        String subject = sc.next();
+
+        System.out.print("Descrição: \t");
+        String description = sc.next();
+
+        System.out.print("Ativo (1 = Sim | 0 = Não): \t");
+        String statusInp = sc.next();
+
+        boolean status = false;
+        status = statusInp.equals("1");
+
+        Task taskForUpdate = new Task(subject, description, status);
+        taskForUpdate.setIdTask(idTask);
+        taskController.updateTask(taskForUpdate);
 
 
+        System.out.println("\n");
+        taskController.listTasks();
+    }
+
+    private static void deleteTask(Scanner sc, TaskController taskController){
+        System.out.println("\n ==== Excluindo uma tarefa ====");
+        System.out.println("Qual desses cadastros deseja Excluir?");
+        taskController.listTasks();
+
+        System.out.print("Digite o Código de Identificação (idTask): ");
+        int idTask = Integer.parseInt(sc.next());
+
+
+        taskController.deleteTask(idTask);
+
+        System.out.println("\n");
+        taskController.listTasks();
+    }
+
+    private static void findTask(Scanner sc, TaskController taskController){
+        System.out.println("\n ==== Buscando por uma tarefa ====");
+
+        System.out.println("Qual desses cadastros deseja Filtrar?");
+        taskController.listTasks();
+
+        System.out.print("Digite o Código de Identificação (idTask): ");
+        int idTask = Integer.parseInt(sc.next());
+
+
+        Task task = taskController.findTask(idTask);
+
+        System.out.println("\nCódigo: "+task.getId()+"\nAssunto: "+task.getSubject()+"\nDescrição: "+task.getDescription()+"\nAtivo: " + task.getStatus());
+
+    }
+    private static void showTasks(TaskController taskController){
+        System.out.println("\n ==== Listando tarefas ====");
+        taskController.listTasks();
+    }
 }
